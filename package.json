@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "babylonjs": "^6.46.0",
-    "stats.js": "^0.17.0"
+    "babylonjs": "^6.46.0"
   }
 }
