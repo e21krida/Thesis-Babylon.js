@@ -1,4 +1,6 @@
 import * as BABYLON from 'babylonjs';
+import Stats from 'stats.js';
+
 console.log("Script loaded");
 function generateCanvases() {
   const canvasContainer = document.querySelector('.canvas-container');
@@ -17,12 +19,18 @@ function generateCanvases() {
     canvasWrapper.appendChild(text);
     canvasContainer.appendChild(canvasWrapper);
 
+    const statsContainer = document.createElement('div');
+    statsContainer.classList.add('stats-container');
+    canvasWrapper.appendChild(statsContainer);
     console.log(`Generating canvas: canvas${i}`);
-    generateBabylon(`canvas${i}`);
+    generateBabylon(`canvas${i}`, statsContainer);
   }
 }
 
-function generateBabylon(canvasId) {
+function generateBabylon(canvasId, statsContainer) {
+  var stats = new Stats();
+  stats.showPanel(0);
+  statsContainer.appendChild(stats.dom);
   const canvas = document.getElementById(canvasId);
   const engine = new BABYLON.Engine(canvas, true);
   const scene = new BABYLON.Scene(engine);
@@ -38,10 +46,12 @@ function generateBabylon(canvasId) {
   camera.target = box.position;
 
   function animate() {
+    stats.begin();
     requestAnimationFrame(animate);
     box.rotation.x += 0.01;
     box.rotation.y += 0.01;
     scene.render();
+    stats.end();
   }
 
   animate();
