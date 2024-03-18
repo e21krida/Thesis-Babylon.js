@@ -3,25 +3,6 @@ import * as BABYLON from 'babylonjs';
 const times = [];
 let fps;
 const canvasContainer = document.querySelector('.canvas-container');
-function refreshLoop() {
-  window.requestAnimationFrame(() => {
-    const now = performance.now();
-    while (times.length > 0 && times[0] <= now - 1000) {
-      times.shift();
-    }
-    times.push(now);
-    fps = times.length;
-    refreshLoop();
-  });
-}
-
-refreshLoop();
-
-function getFPS() {
-  return fps || 0;
-}
-
-
 
 function generateCanvases() {
   for (let i = 1; i <= 12; i++) {
@@ -62,7 +43,10 @@ function generateBabylon(canvasId, canvasNumber) {
     box.rotation.x += 0.01;
     box.rotation.y += 0.01;
     scene.render();
-    console.log(`Canvas ${canvasNumber} - Current FPS:`, getFPS());
+    if (window.fpsTrackerActive) {
+      const fpsEvent = new CustomEvent('logFPS', { detail: `Canvas ${canvasNumber} - Current FPS: ${getFPS()}` });
+      window.dispatchEvent(fpsEvent);
+    }
   }
 
   animate();
