@@ -1,31 +1,39 @@
 import * as BABYLON from 'babylonjs';
 const canvasContainer = document.querySelector('.canvas-container');
 
-function generateCanvases() {
-  for (let i = 1; i <= 12; i++) {
-    const canvasWrapper = document.createElement('div');
-    canvasWrapper.classList.add('canvas-wrapper');
-    const canvas = document.createElement('canvas');
-    canvas.id = `canvas${i}`;
-    canvas.width = 800;
-    canvas.height = 370;
-    canvasWrapper.appendChild(canvas);
-    const text = document.createElement('div');
-    text.classList.add('canvas-text');
-    text.textContent = `Canvas ${i}`;
-    canvasWrapper.appendChild(text);
-
-    canvas.addEventListener('click', function () {
-      window.location.href = `product.html?canvas=${i}`;
-    })
-
-    canvasContainer.appendChild(canvasWrapper);
-    console.log(`Generating canvas: canvas${i}`);
-    generateBabylon(`canvas${i}`, i);
-  }
+function getURLParam(parameter) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(parameter);
 }
 
-function generateBabylon(canvasId, canvasNumber) {
+document.addEventListener('DOMContentLoaded', function () {
+  const canvasNumber = getURLParam('canvas');
+  console.log(canvasNumber);
+  if (canvasNumber) {
+    generateCanvas(canvasNumber);
+  }
+})
+
+function generateCanvas(canvasNumber) {
+  console.log("generateCanvas working!");
+  const canvasWrapper = document.createElement('div');
+  canvasWrapper.classList.add('canvas-wrapper');
+  const canvas = document.createElement('canvas');
+  canvas.id = `canvas${canvasNumber}`;
+  canvas.width = 800;
+  canvas.height = 370;
+  canvasWrapper.appendChild(canvas);
+  const text = document.createElement('div');
+  text.classList.add('canvas-text');
+  text.textContent = `Canvas ${canvasNumber}`;
+  canvasWrapper.appendChild(text);
+  canvasContainer.appendChild(canvasWrapper);
+  console.log(`Generating canvas: canvas${canvasNumber}`);
+  generateBabylon(canvasNumber);
+}
+
+function generateBabylon(canvasNumber) {
+  const canvasId = `canvas${canvasNumber}`;
   const canvas = document.getElementById(canvasId);
   const engine = new BABYLON.Engine(canvas, true);
   const scene = new BABYLON.Scene(engine);
@@ -53,7 +61,3 @@ function generateBabylon(canvasId, canvasNumber) {
 
   animate();
 }
-
-window.onload = function () {
-  generateCanvases();
-};
