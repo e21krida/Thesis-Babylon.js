@@ -29,7 +29,7 @@ function generateBabylon(canvasId, canvasNumber) {
   const canvas = document.getElementById(canvasId);
   const engine = new BABYLON.Engine(canvas, true);
   const scene = new BABYLON.Scene(engine);
-  scene.clearColor = new BABYLON.Color3.FromHexString('#bccbe3');
+  scene.clearColor = new BABYLON.Color3.FromHexString('#FFFFFF');
   const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
   const box = BABYLON.MeshBuilder.CreateBox("box", { size: 1 }, scene);
   const material = new BABYLON.StandardMaterial("material", scene);
