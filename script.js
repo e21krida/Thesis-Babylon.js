@@ -2,6 +2,7 @@ import * as BABYLON from 'babylonjs';
 import 'babylonjs-loaders';
 
 const models = {};
+let amountofModels = 0;
 const canvasContainer = document.querySelector('.canvas-container');
 
 window.onload = function () {
@@ -33,9 +34,9 @@ function createCanvases(model, index) {
   text.textContent = `Canvas ${index + 1}: ${model.name}`;
   canvasWrapper.appendChild(text);
   canvasContainer.appendChild(canvasWrapper);
-  //canvas.addEventListener('click', function () {
-  //  window.location.href = `product.html?name=${model.name}`;
-  //});
+  canvas.addEventListener('click', function () {
+    window.location.href = `product.html?name=${model.name}`;
+  });
 
   initializeBabylon(canvasId, model.path);
 }
@@ -51,45 +52,39 @@ function initializeBabylon(canvasId, modelPath) {
 }
 
 function initializeModel(canvasId, modelPath, scene, canvas, engine) {
-  BABYLON.SceneLoader.ImportMesh("", modelPath, "", scene, function (meshes, particleSystems, skeletons) {
+  BABYLON.SceneLoader.ImportMesh("", modelPath, "", scene, function (meshes) {
     let rootMeshes = scene.transformNodes.find(node => node.name == "Sketchfab_model");
-    console.log(rootMeshes);
-    models[canvasId] = [rootMeshes];
-    rootMeshes.rotationQuaternion = null;
-    rootMeshes.rotation.x = -Math.PI / 2;
-    scaleModelBabylon(rootMeshes, 1);
-    rootMeshes.normalizeToUnitCube();
-    const camera = new BABYLON.ArcRotateCamera("arcCamera", Math.PI / 1, Math.PI / 1, 1.5, new BABYLON.Vector3(0, 0, 0), scene);
-    camera.attachControl(canvas, true);
-    scene.activeCamera = camera;
-    adjustCameraBabylon(rootMeshes, camera);
-
-    animate(scene, canvasId, engine);
+    if (rootMeshes) {
+      models[canvasId] = [rootMeshes];
+      scaleModel(rootMeshes, 1);
+      const camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 5, -10), scene);
+      adjustCamera(rootMeshes, camera);
+      rootMeshes.rotationQuaternion = null;
+      rootMeshes.rotation.x = -Math.PI / 2;
+      animate(scene, canvasId, engine);
+      amountofModels++;
+    }
   })
 }
 
-function scaleModelBabylon(model, targetHeight) {
-  let boundingBox = model.getHierarchyBoundingVectors();
+function scaleModel(model, targetSize) {
+  let boundingBox = model.getHierarchyBoundingVectors(true);
   let size = boundingBox.max.subtract(boundingBox.min);
-  let scaleFactor = targetHeight / size.x;
+  let maxDimension = Math.max(size.x, size.y, size.z);
+  let scaleFactor = targetSize / maxDimension;
   model.scaling = new BABYLON.Vector3(scaleFactor, scaleFactor, scaleFactor);
 }
 
-function adjustCameraBabylon(model, camera) {
-  let boundingBox = model.getHierarchyBoundingVectors();
-  let size = boundingBox.max.subtract(boundingBox.min);
-  let center = boundingBox.min.add(size.scale(0.5));
-  let maxDim = Math.max(size.x, size.y, size.z);
-  let distance = maxDim * 1;
-  camera.radius = distance;
-  camera.setTarget(center);
-  camera.alpha = Math.PI / 2;
-  camera.beta = Math.PI / 2;
+function adjustCamera(model, camera) {
+  let boundingBox = model.getHierarchyBoundingVectors(true);
+  let center = boundingBox.min.add(boundingBox.max).scale(0.5);
+  camera.position = new BABYLON.Vector3(center.x + 1.6, center.y, center.z); // Adjust '10' to set how far to the side
+  camera.setTarget(center); // Target the center of the model
 }
 
 function animate(scene, canvasId, engine) {
-  engine.runRenderLoop(function () {
-    if (models[canvasId]) {
+  engine.runRenderLoop(function () { 
+    if (models[canvasId] && amountofModels == 12) {
       models[canvasId].forEach(rootMesh => {
         rootMesh.rotation.y += 0.01;
       });
