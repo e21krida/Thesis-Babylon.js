@@ -3,8 +3,8 @@
   text-transform: uppercase;
 }
 
-h1, h2, text {
-  color: white;
+h1, h2, text, p {
+  color: #cccccc;
 }
 
 h2 {
@@ -54,7 +54,7 @@ body {
 
 .canvas-text, .product-canvas-text {
   font-size: 12px;
-  color: white;
+  color: #cccccc;
   text-align: center;
 }
 
@@ -68,7 +68,7 @@ body {
 
 .menu-buttons button {
   background-color: #000;
-  color: #FFF;
+  color: #cccccc;
   border: none;
   cursor: pointer;
   width: 100%;
@@ -78,6 +78,6 @@ body {
 }
 
 .menu-buttons button:hover {
-  background-color: #FFF;
+  background-color: #cccccc;
   color: #000;
 }
