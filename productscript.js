@@ -116,9 +116,9 @@ function animate(scene, model, engine) {
   engine.runRenderLoop(function () {
     model.rotation.y += 0.01;
     scene.render();
+    if (window.fpsTrackerActive) {
+      const fpsEvent = new CustomEvent('logFPS', { detail: `${model} - Current FPS: ${getFPS()}` });
+      window.dispatchEvent(fpsEvent);
+    }
   });
-  if (window.fpsTrackerActive) {
-    const fpsEvent = new CustomEvent('logFPS', { detail: `Canvas ${canvasNumber} - Current FPS: ${getFPS()}` });
-    window.dispatchEvent(fpsEvent);
-  }
 }

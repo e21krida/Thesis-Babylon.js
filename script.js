@@ -90,9 +90,9 @@ function animate(scene, canvasId, engine) {
       });
     }
     scene.render();
-  });
   if (window.fpsTrackerActive) {
-    const fpsEvent = new CustomEvent('logFPS', { detail: `Canvas ${canvasNumber} - Current FPS: ${getFPS()}` });
+    const fpsEvent = new CustomEvent('logFPS', { detail: `Canvas ${canvasId} - Current FPS: ${getFPS()}` });
     window.dispatchEvent(fpsEvent);
   }
+  });
 }
