@@ -78,8 +78,8 @@ function scaleModel(model, targetSize) {
 function adjustCamera(model, camera) {
   let boundingBox = model.getHierarchyBoundingVectors(true);
   let center = boundingBox.min.add(boundingBox.max).scale(0.5);
-  camera.position = new BABYLON.Vector3(center.x + 1.6, center.y, center.z); // Adjust '10' to set how far to the side
-  camera.setTarget(center); // Target the center of the model
+  camera.position = new BABYLON.Vector3(center.x + 1.6, center.y, center.z);
+  camera.setTarget(center);
 }
 
 function animate(scene, canvasId, engine) {
