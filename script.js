@@ -31,7 +31,7 @@ function createCanvases(model, index) {
   canvasWrapper.appendChild(canvas);
   const text = document.createElement('div');
   text.classList.add('product-canvas-text');
-  text.textContent = `Canvas ${index + 1}: ${model.name}`;
+  text.textContent = model.name;
   canvasWrapper.appendChild(text);
   canvasContainer.appendChild(canvasWrapper);
   canvas.addEventListener('click', function () {
