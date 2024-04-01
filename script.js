@@ -2,7 +2,7 @@ import * as BABYLON from 'babylonjs';
 import 'babylonjs-loaders';
 
 const models = {};
-let amountofModels = 0;
+let loadedModels = 0;
 const canvasContainer = document.querySelector('.canvas-container');
 
 window.onload = function () {
@@ -62,7 +62,10 @@ function initializeModel(canvasId, modelPath, scene, canvas, engine) {
       rootMeshes.rotationQuaternion = null;
       rootMeshes.rotation.x = -Math.PI / 2;
       animate(scene, canvasId, engine);
-      amountofModels++;
+      loadedModels++;
+    if(loadedModels == 12) {
+      window.dispatchEvent(new CustomEvent('allModelsLoaded'));
+    }
     }
   })
 }
@@ -84,7 +87,7 @@ function adjustCamera(model, camera) {
 
 function animate(scene, canvasId, engine) {
   engine.runRenderLoop(function () { 
-    if (models[canvasId] && amountofModels == 12) {
+    if (models[canvasId] && loadedModels == 12) {
       models[canvasId].forEach(rootMesh => {
         rootMesh.rotation.y += 0.01;
       });
