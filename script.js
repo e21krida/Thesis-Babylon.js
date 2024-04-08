@@ -53,14 +53,15 @@ function initializeBabylon(canvasId, modelPath) {
 
 function initializeModel(canvasId, modelPath, scene, canvas, engine) {
   BABYLON.SceneLoader.ImportMesh("", modelPath, "", scene, function (meshes) {
-    let rootMeshes = scene.transformNodes.find(node => node.name == "Sketchfab_model");
+    let model = scene.transformNodes.find(node => node.name == "Sketchfab_model");
     if (rootMeshes) {
-      models[canvasId] = [rootMeshes];
-      scaleModel(rootMeshes, 1);
+      models[canvasId] = [model];
+      scaleModel(model, 1);
       const camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 5, -10), scene);
-      adjustCamera(rootMeshes, camera);
-      rootMeshes.rotationQuaternion = null;
-      rootMeshes.rotation.x = -Math.PI / 2;
+      adjustCamera(model, camera);
+      model.rotationQuaternion = null;
+      model.rotation.x = -Math.PI / 2;
+      model.rotation.y = -Math.PI / 2;
       animate(scene, canvasId, engine);
       loadedModels++;
     if(loadedModels == 12) {

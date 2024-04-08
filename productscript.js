@@ -92,6 +92,7 @@ function initializeModel(modelPath, scene, engine) {
       adjustCamera(model, camera);
       model.rotationQuaternion = null;
       model.rotation.x = -Math.PI / 2;
+      model.rotation.y = -Math.PI / 2;
       animate(scene, model, engine);
     }
   })
