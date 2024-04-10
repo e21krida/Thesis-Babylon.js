@@ -1,6 +1,7 @@
 import * as BABYLON from 'babylonjs';
 import 'babylonjs-loaders';
 
+let dispatchPossibleFlag = true;
 const canvasContainer = document.querySelector('.product-canvas-container');
 
 function getURLParam(parameter) {
@@ -117,9 +118,13 @@ function animate(scene, model, engine) {
   engine.runRenderLoop(function () {
     model.rotation.y += 0.01;
     scene.render();
-    if (window.fpsTrackerActive) {
-      const fpsEvent = new CustomEvent('logFPS', { detail: `${model} - Current FPS: ${getFPS()}` });
+    if (window.fpsTrackerActive && model && dispatchPossibleFlag) {
+      const fpsEvent = new CustomEvent('logFPS', { detail: { name: "Canvas", value: getFPS() } });
       window.dispatchEvent(fpsEvent);
+      dispatchPossibleFlag = false;
+      setTimeout(() => {
+        dispatchPossibleFlag = true;
+      }, 1000);
     }
   });
 }

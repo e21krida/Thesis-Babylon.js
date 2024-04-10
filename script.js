@@ -2,6 +2,7 @@ import * as BABYLON from 'babylonjs';
 import 'babylonjs-loaders';
 
 const models = {};
+const dispatchPossibleFlags = {};
 let loadedModels = 0;
 const canvasContainer = document.querySelector('.canvas-container');
 
@@ -47,14 +48,14 @@ function initializeBabylon(canvasId, modelPath) {
   const scene = new BABYLON.Scene(engine);
   scene.clearColor = new BABYLON.Color3.FromHexString('#cccccc');
   const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-
+  dispatchPossibleFlags[canvasId] = true;
   initializeModel(canvasId, modelPath, scene, canvas, engine)
 }
 
 function initializeModel(canvasId, modelPath, scene, canvas, engine) {
   BABYLON.SceneLoader.ImportMesh("", modelPath, "", scene, function (meshes) {
     let model = scene.transformNodes.find(node => node.name == "Sketchfab_model");
-    if (rootMeshes) {
+    if (model) {
       models[canvasId] = [model];
       scaleModel(model, 1);
       const camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 5, -10), scene);
@@ -64,9 +65,9 @@ function initializeModel(canvasId, modelPath, scene, canvas, engine) {
       model.rotation.y = -Math.PI / 2;
       animate(scene, canvasId, engine);
       loadedModels++;
-    if(loadedModels == 12) {
-      window.dispatchEvent(new CustomEvent('allModelsLoaded'));
-    }
+      if (loadedModels == 12) {
+        window.dispatchEvent(new CustomEvent('allModelsLoaded'));
+      }
     }
   })
 }
@@ -87,16 +88,20 @@ function adjustCamera(model, camera) {
 }
 
 function animate(scene, canvasId, engine) {
-  engine.runRenderLoop(function () { 
+  engine.runRenderLoop(function () {
     if (models[canvasId] && loadedModels == 12) {
       models[canvasId].forEach(rootMesh => {
         rootMesh.rotation.y += 0.01;
       });
     }
     scene.render();
-  if (window.fpsTrackerActive) {
-    const fpsEvent = new CustomEvent('logFPS', { detail: `Canvas ${canvasId} - Current FPS: ${getFPS()}` });
-    window.dispatchEvent(fpsEvent);
-  }
+    if (window.fpsTrackerActive && loadedModels == 12 && dispatchPossibleFlags[canvasId]) {
+      const fpsEvent = new CustomEvent('logFPS', { detail: { name: canvasId, value: getFPS() } });
+      window.dispatchEvent(fpsEvent);
+      dispatchPossibleFlags[canvasId] = false;
+      setTimeout(() => {
+        dispatchPossibleFlags[canvasId] = true;
+      }, 1000);
+    }
   });
 }

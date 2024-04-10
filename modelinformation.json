@@ -106,16 +106,16 @@
   },
   {
     "id": 8,
-    "name": "Faded Chalk",
-    "path": "models/faded-chalk.glb",
+    "name": "Cardboard",
+    "path": "models/cardboard.glb",
     "references": [
       {
-        "text": "Faded Chalk",
-        "href": "https://sketchfab.com/3d-models/faded-chalk-rtfkt-one-contest-submission-297ef1fe967a423c8691be15f7bec1c1"
+        "text": "Cardboard",
+        "href": "https://sketchfab.com/3d-models/rtfktchallenge-cardboard-theme-52e78ab893144ac08666184f0ce60e4f"
       },
       {
-        "text": "TKWMO",
-        "href": "https://sketchfab.com/TKWMO"
+        "text": "Bert Gedik",
+        "href": "https://sketchfab.com/berkgedik"
       }
     ]
   },
