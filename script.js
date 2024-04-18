@@ -46,25 +46,25 @@ function initializeBabylon(canvasId, modelPath) {
   const canvas = document.getElementById(canvasId);
   const engine = new BABYLON.Engine(canvas, true);
   const scene = new BABYLON.Scene(engine);
+  const camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 5, -10), scene);
   scene.clearColor = new BABYLON.Color3.FromHexString('#cccccc');
   const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
   dispatchPossibleFlags[canvasId] = true;
-  initializeModel(canvasId, modelPath, scene, canvas, engine)
+  initializeModel(canvasId, modelPath, scene, camera, engine)
 }
 
-function initializeModel(canvasId, modelPath, scene, canvas, engine) {
+function initializeModel(canvasId, modelPath, scene, camera, engine) {
   BABYLON.SceneLoader.ImportMesh("", modelPath, "", scene, function (meshes) {
     let model = scene.transformNodes.find(node => node.name == "Sketchfab_model");
     if (model) {
+      loadedModels++;
       models[canvasId] = [model];
       scaleModel(model, 1);
-      const camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 5, -10), scene);
       adjustCamera(model, camera);
       model.rotationQuaternion = null;
       model.rotation.x = -Math.PI / 2;
       model.rotation.y = -Math.PI / 2;
       animate(scene, canvasId, engine);
-      loadedModels++;
       if (loadedModels == 12) {
         window.dispatchEvent(new CustomEvent('allModelsLoaded'));
       }
@@ -91,7 +91,7 @@ function animate(scene, canvasId, engine) {
   engine.runRenderLoop(function () {
     if (models[canvasId] && loadedModels == 12) {
       models[canvasId].forEach(rootMesh => {
-        rootMesh.rotation.y += 0.01;
+        rootMesh.rotation.y += 0.008;
       });
     }
     scene.render();

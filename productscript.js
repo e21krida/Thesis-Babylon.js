@@ -42,30 +42,21 @@ function generateCanvas(modelName) {
       canvasWrapper.appendChild(text);
       canvasContainer.appendChild(canvasWrapper);
 
-      // Establishes the reference
       let referenceText = document.createElement('span');
       referenceText.classList.add('product-reference-text');
       canvasWrapper.appendChild(referenceText);
-
-      // References the source of the model.
       let sourceA = document.createElement('a');
       sourceA.textContent = rightModel.references[0].text;
       sourceA.href = rightModel.references[0].href;
       referenceText.appendChild(sourceA);
-
       let text1 = document.createTextNode(' by ');
       referenceText.appendChild(text1);
-
-      // References the creator of the model.
       let sourceB = document.createElement('a');
       sourceB.textContent = rightModel.references[1].text;
       sourceB.href = rightModel.references[1].href;
       referenceText.appendChild(sourceB);
-
       let text2 = document.createTextNode(' is licensed under ');
       referenceText.appendChild(text2);
-
-      // References CC BY 4.0
       let sourceC = document.createElement('a');
       sourceC.textContent = 'CC BY 4.0'
       sourceC.href = 'https://creativecommons.org/licenses/by/4.0/';
